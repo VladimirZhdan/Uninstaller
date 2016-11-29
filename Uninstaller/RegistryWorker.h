@@ -5,6 +5,7 @@
 //own files
 #include "ProgramInfo.h"
 #include "ErrorLogger.h"
+#include "FileLogic.h"
 
 #define STRING_LENGTH 256
 
@@ -15,6 +16,7 @@ class RegistryWorker
 public:
 	RegistryWorker();
 	vector<ProgramInfo*> GetProgramInfoVectorFromRegistry();
+	void RefreshProgramInfoVector();
 	~RegistryWorker();
 
 private:
@@ -22,6 +24,7 @@ private:
 	void InitializeProgramInfoVectorFromUninstallSection(HKEY hUninstallSectionKey);
 	ProgramInfo* GetProgramInfoFromProgramSection(HKEY hProgramSectionKey, DWORD programSectionIndex);
 	void ClearProgramInfoVector();	
+	DWORD GetDwordFromBytes(BYTE *source);
 	vector<ProgramInfo*> programInfoVector;	
 	
 };

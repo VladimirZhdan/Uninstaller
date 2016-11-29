@@ -4,11 +4,17 @@
 
 RegistryWorker::RegistryWorker()
 {
+	SetProgramInfoVector();
 }
 
 vector<ProgramInfo*> RegistryWorker::GetProgramInfoVectorFromRegistry()
 {
 	return programInfoVector;
+}
+
+void RegistryWorker::RefreshProgramInfoVector()
+{
+	SetProgramInfoVector();
 }
 
 void RegistryWorker::SetProgramInfoVector()
@@ -43,7 +49,7 @@ void RegistryWorker::InitializeProgramInfoVectorFromUninstallSection(HKEY hUnins
 	DWORD stringClassLength;
 	TCHAR subSectionName[STRING_LENGTH] = _T("");
 	DWORD subSectionIndex = 0;
-	while ((lResult = RegEnumKeyEx(hUninstallSectionKey, subSectionIndex, subSectionName, &subSectionNameLength, NULL, NULL, &stringClassLength, NULL)) != ERROR_NO_MORE_ITEMS && (subSectionIndex < 10))
+	while ((lResult = RegEnumKeyEx(hUninstallSectionKey, subSectionIndex, subSectionName, &subSectionNameLength, NULL, NULL, &stringClassLength, NULL)) != ERROR_NO_MORE_ITEMS)
 	{
 		if (lResult == ERROR_SUCCESS)
 		{
@@ -68,8 +74,14 @@ ProgramInfo* RegistryWorker::GetProgramInfoFromProgramSection(HKEY hProgramSecti
 {
 	DWORD lResult;
 	bool hasUninstallString = false;
-	TCHAR uninstallString[STRING_LENGTH];
-	TCHAR displayName[STRING_LENGTH];
+	TCHAR displayName[STRING_LENGTH] = _T("");
+	TCHAR uninstallString[STRING_LENGTH] = _T("");
+	DWORD size = 0;
+	TCHAR version[STRING_LENGTH] = _T("");
+	TCHAR installDate[STRING_LENGTH] = _T("");
+	TCHAR company[STRING_LENGTH] = _T("");
+	TCHAR installLocation[STRING_LENGTH] = _T("");
+
 
 	DWORD parameterIndex = 0;
 	DWORD parameterNameLength = STRING_LENGTH;
@@ -86,7 +98,42 @@ ProgramInfo* RegistryWorker::GetProgramInfoFromProgramSection(HKEY hProgramSecti
 		if (_tcscmp(parameterName, _T("DisplayName")) == 0)
 		{
 			_tcscpy_s(displayName, (LPTSTR)data);
+		}		
+		if (_tcscmp(parameterName, _T("EstimatedSize")) == 0)
+		{
+			size = GetDwordFromBytes(data);			
 		}
+		if (_tcscmp(parameterName, _T("DisplayVersion")) == 0)
+		{
+			_tcscpy_s(version, (LPTSTR)data);
+		}
+		if (_tcscmp(parameterName, _T("InstallDate")) == 0)
+		{
+			_tcscpy_s(installDate, (LPTSTR)data);
+		}
+		if (_tcscmp(parameterName, _T("Publisher")) == 0)
+		{
+			_tcscpy_s(company, (LPTSTR)data);
+		}
+		if (_tcscmp(parameterName, _T("InstallLocation")) == 0)
+		{
+			_tcscpy_s(installLocation, (LPTSTR)data);
+		}
+		if (_tcscmp(parameterName, _T("Inno Setup: App Path")) == 0)
+		{
+			if (_tcscmp(installLocation, _T("")) == 0)
+			{
+				_tcscpy_s(installLocation, (LPTSTR)data);
+			}			
+		}
+		if (_tcscmp(parameterName, _T("InstallPath")) == 0)
+		{
+			if (_tcscmp(installLocation, _T("")) == 0)
+			{
+				_tcscpy_s(installLocation, (LPTSTR)data);
+			}
+		}
+
 		parameterNameLength = STRING_LENGTH;
 		dataLength = STRING_LENGTH;
 		++parameterIndex;
@@ -94,7 +141,15 @@ ProgramInfo* RegistryWorker::GetProgramInfoFromProgramSection(HKEY hProgramSecti
 
 	if (hasUninstallString)
 	{
-		return new ProgramInfo(programSectionIndex, displayName, uninstallString);
+		if (size == 0)
+		{
+			if (_tcscmp(installLocation, _T("")) != 0)
+			{
+				size = (DWORD)(FileLogic::GetFolderSize(installLocation) / 1024);
+			}
+		}
+
+		return new ProgramInfo(programSectionIndex, displayName, uninstallString, size, version, installDate, company);
 	}
 	else
 	{
@@ -111,6 +166,12 @@ void RegistryWorker::ClearProgramInfoVector()
 	programInfoVector.clear();
 }
 
+DWORD RegistryWorker::GetDwordFromBytes(BYTE *source)
+{
+	return (source[0]) | (source[1] << 8) | (source[2] << 16) | (source[3] << 24);
+}
+
 RegistryWorker::~RegistryWorker()
 {
+	ClearProgramInfoVector();
 }

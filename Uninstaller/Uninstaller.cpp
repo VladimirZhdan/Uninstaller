@@ -8,6 +8,7 @@
 
 //own files
 #include "RegistryWorker.h"
+#include "ProgramListView.h"
 
 #define MAX_LOADSTRING 100
 
@@ -16,12 +17,23 @@ HINSTANCE hInst;                                // текущий экземпляр
 WCHAR szTitle[MAX_LOADSTRING];                  // Текст строки заголовка
 WCHAR szWindowClass[MAX_LOADSTRING];            // имя класса главного окна
 //own variabless
+ProgramListView *listViewPrograms;
+HWND hListViewPrograms;
+LVITEM lvItem;
+LVCOLUMN lvCol;
+RegistryWorker *regWorker;
+vector<ProgramInfo*> programs;
 
-// Отправить объявления функций, включенных в этот модуль кода:
+
+// methods signatures
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+
+//own methods
+void InitResources(HWND hWnd);
+void FreeResources(HWND hWnd);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -31,9 +43,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-	//TODO
-	ErrorLogger::Log(2, _T("Trulalla"));	
-
+	//TODO		
 
     // Инициализация глобальных строк
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -130,21 +140,12 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	static HWND hListBox;	
-
+{	
     switch (message)
     {
 	case WM_CREATE:
 		{			
-			RECT clientRect;
-			GetClientRect(hWnd, &clientRect);
-			hListBox = CreateWindowEx(0, (LPCWSTR) WC_LISTVIEWW, NULL, WS_VISIBLE | WS_CHILD | WS_BORDER | LVS_SHOWSELALWAYS | LVS_REPORT, 0, 50, clientRect.right, clientRect.bottom - 50, hWnd, NULL, hInst, NULL);
-			/*SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)"name");
-			SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)"extension");
-			SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)"date");
-			SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)"size");*/
-			ShowWindow(hListBox, SW_SHOWNORMAL);
+			InitResources(hWnd);
 		}	
 		break;
     case WM_COMMAND:
@@ -173,12 +174,31 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         break;
     case WM_DESTROY:
+		FreeResources(hWnd);
         PostQuitMessage(0);
         break;
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
     return 0;
+}
+
+void InitResources(HWND hWnd)
+{	
+	regWorker = new RegistryWorker();
+	programs = regWorker->GetProgramInfoVectorFromRegistry();
+
+	RECT clientRect;
+	GetClientRect(hWnd, &clientRect);
+	listViewPrograms = new ProgramListView(0, 50, clientRect.right, clientRect.bottom - 50, hWnd, hInst);	
+}
+
+void FreeResources(HWND hWnd)
+{
+	if (regWorker != NULL)
+	{
+		delete regWorker;
+	}
 }
 
 // Обработчик сообщений для окна "О программе".

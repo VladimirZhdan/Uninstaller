@@ -3,13 +3,7 @@
 #include <ctime>
 #include <iostream>
 #include <fstream>
-#include "TString.h"
-
-#if defined(UNICODE) || defined(_UNICODE)
-#define tofstream std::wofstream
-#else
-#define tofstream std::ofstream
-#endif
+#include "CommonTTypes.h"
 
 using namespace std;
 

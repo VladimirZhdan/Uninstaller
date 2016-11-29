@@ -17,19 +17,22 @@ void ErrorLogger::Log(DWORD error, tstring message)
 	{
 		EnterCriticalSection(lockObj);
 	}*/		
-	/*__try
-	{*/
+	try
+	{
 		if (outputStream.is_open())
 		{
 			outputStream << currTimeStr << _T(" : Error-") << error << _T("; ") << message << _T("\n");
 		}
-	/*}
-	__finally
-	{*/
-		outputStream.close();		
-	//}	
-	/*if (isCriticalSectionInitialize)
+	}
+	catch(...)
 	{
+		outputStream.close();
+		throw;
+	}
+	outputStream.close();		
+	
+	/*if (isCriticalSectionInitialize)
+	{	
 		LeaveCriticalSection(lockObj);
 	}*/	
 }
