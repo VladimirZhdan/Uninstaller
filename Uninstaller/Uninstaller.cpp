@@ -3,6 +3,11 @@
 
 #include "stdafx.h"
 #include "Uninstaller.h"
+#include <Windows.h>
+#include <CommCtrl.h>
+
+//own files
+#include "RegistryWorker.h"
 
 #define MAX_LOADSTRING 100
 
@@ -10,6 +15,7 @@
 HINSTANCE hInst;                                // текущий экземпл€р
 WCHAR szTitle[MAX_LOADSTRING];                  // “екст строки заголовка
 WCHAR szWindowClass[MAX_LOADSTRING];            // им€ класса главного окна
+//own variabless
 
 // ќтправить объ€влени€ функций, включенных в этот модуль кода:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
@@ -25,7 +31,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    // TODO: разместите код здесь.
+	//TODO
+	ErrorLogger::Log(2, _T("Trulalla"));	
+
 
     // »нициализаци€ глобальных строк
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -95,7 +103,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
-   hInst = hInstance; // —охранить дескриптор экземпл€ра в глобальной переменной
+   hInst = hInstance; // —охранить дескриптор экземпл€ра в глобальной переменной   
 
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
@@ -123,8 +131,22 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	static HWND hListBox;	
+
     switch (message)
     {
+	case WM_CREATE:
+		{			
+			RECT clientRect;
+			GetClientRect(hWnd, &clientRect);
+			hListBox = CreateWindowEx(0, (LPCWSTR) WC_LISTVIEWW, NULL, WS_VISIBLE | WS_CHILD | WS_BORDER | LVS_SHOWSELALWAYS | LVS_REPORT, 0, 50, clientRect.right, clientRect.bottom - 50, hWnd, NULL, hInst, NULL);
+			/*SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)"name");
+			SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)"extension");
+			SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)"date");
+			SendMessage(hListBox, LB_ADDSTRING, 0, (LPARAM)"size");*/
+			ShowWindow(hListBox, SW_SHOWNORMAL);
+		}	
+		break;
     case WM_COMMAND:
         {
             int wmId = LOWORD(wParam);

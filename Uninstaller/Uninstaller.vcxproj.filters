@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Registry">
+      <UniqueIdentifier>{e3d6165c-e6f8-4df8-b2c1-0a58b68ffeb6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -30,12 +33,33 @@
     <ClInclude Include="Uninstaller.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="RegistryWorker.h">
+      <Filter>Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="ProgramInfo.h">
+      <Filter>Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="ErrorLogger.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="TString.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
     <ClCompile Include="Uninstaller.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="RegistryWorker.cpp">
+      <Filter>Registry</Filter>
+    </ClCompile>
+    <ClCompile Include="ProgramInfo.cpp">
+      <Filter>Registry</Filter>
+    </ClCompile>
+    <ClCompile Include="ErrorLogger.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
   </ItemGroup>
