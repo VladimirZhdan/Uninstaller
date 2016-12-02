@@ -41,3 +41,70 @@ __int64 FileLogic::GetFolderSize(tstring path)
 	}
 	return size;
 }
+
+bool FileLogic::isIcoFile(tstring filePath)
+{
+	return isTypeFile(filePath, _T("ico"));
+}
+
+bool FileLogic::isExeFile(tstring filePath)
+{
+	return isTypeFile(filePath, _T("exe"));
+}
+
+bool FileLogic::isTypeFile(tstring filePath, tstring extension)
+{
+	int filePathLength = filePath.length();
+	int extensionLength = extension.length();
+	if (filePathLength > (extensionLength + 1))
+	{		
+		if (filePath.substr(filePathLength - extensionLength, extensionLength) == extension)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+HICON FileLogic::GetIconFromFile(tstring filePath)
+{	
+	HICON result;
+	if (isIcoFile(filePath))
+	{
+		return (HICON)LoadImage(NULL, filePath.c_str(), IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
+	}
+	if (isExeFile(filePath))
+	{
+		WORD indexIcon;		
+
+		return ExtractAssociatedIcon(NULL, (TCHAR *)filePath.c_str(), &indexIcon);
+	}
+	return NULL;
+}
+
+void FileLogic::GetIconFromFileEx(tstring filePath, HICON &smallIcon, HICON &largeIcon)
+{
+	smallIcon = NULL;
+	largeIcon = NULL;
+	HICON result;
+	if (isIcoFile(filePath))
+	{
+		smallIcon = (HICON)LoadImage(NULL, filePath.c_str(), IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
+		largeIcon = (HICON)LoadImage(NULL, filePath.c_str(), IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
+	}
+	if (isExeFile(filePath))
+	{
+		WORD indexIcon;
+
+		ExtractIconEx((TCHAR *)filePath.c_str(), 0, &largeIcon, &smallIcon, 1);
+	}	
+}
+
+bool FileLogic::isMsiExecFile(tstring filePath)
+{	
+	if (filePath == _T("msiexec.exe"))
+	{
+		return true;
+	}
+	return false;
+}

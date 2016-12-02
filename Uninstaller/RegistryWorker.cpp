@@ -81,6 +81,8 @@ ProgramInfo* RegistryWorker::GetProgramInfoFromProgramSection(HKEY hProgramSecti
 	TCHAR installDate[STRING_LENGTH] = _T("");
 	TCHAR company[STRING_LENGTH] = _T("");
 	TCHAR installLocation[STRING_LENGTH] = _T("");
+	TCHAR displayIcon[STRING_LENGTH] = _T("");
+
 
 
 	DWORD parameterIndex = 0;
@@ -98,7 +100,11 @@ ProgramInfo* RegistryWorker::GetProgramInfoFromProgramSection(HKEY hProgramSecti
 		if (_tcscmp(parameterName, _T("DisplayName")) == 0)
 		{
 			_tcscpy_s(displayName, (LPTSTR)data);
-		}		
+		}
+		if (_tcscmp(parameterName, _T("DisplayIcon")) == 0)
+		{
+			_tcscpy_s(displayIcon, (LPTSTR)data);
+		}
 		if (_tcscmp(parameterName, _T("EstimatedSize")) == 0)
 		{
 			size = GetDwordFromBytes(data);			
@@ -149,7 +155,7 @@ ProgramInfo* RegistryWorker::GetProgramInfoFromProgramSection(HKEY hProgramSecti
 			}
 		}
 
-		return new ProgramInfo(programSectionIndex, displayName, uninstallString, size, version, installDate, company);
+		return new ProgramInfo(programSectionIndex, displayIcon, displayName, uninstallString, size, version, installDate, company);
 	}
 	else
 	{

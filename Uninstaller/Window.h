@@ -33,7 +33,7 @@ private:
 	LPCTSTR lpWindowTitle;
 	WINDOW_PROC wndProc;
 	ATOM RegisterWindowClass();
-	void InitInstance(int width, int height);
+	bool InitInstance(int width, int height);
 
 };
 

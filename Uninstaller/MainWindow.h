@@ -5,7 +5,7 @@
 #include "CommonTTypes.h"
 #include "WindowManager.h"
 #include "ProgramListView.h"
-#include "DialogManager.h";
+#include "DialogManager.h"
 
 #define MAX_LOADSTRING 100
 
@@ -16,7 +16,7 @@ public:
 	~MainWindow();
 	void Show();
 	void Hide();
-private:
+protected:
 	//controls
 	ProgramListView *listViewPrograms;
 	HMENU hMenu;
@@ -28,8 +28,7 @@ private:
 		UINT,
 		WPARAM,
 		LPARAM
-	);
-	friend LRESULT CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);	
+	);	
 	//fields	
 };
 

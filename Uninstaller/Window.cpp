@@ -3,12 +3,13 @@
 
 POINT Window::screenCenter = POINT{ 0,0 };
 
-Window::Window(WINDOW_PROC wndProc, LPCTSTR lpClassName, LPCTSTR lpWindowTitle , int width, int height)
+Window::Window(WINDOW_PROC wndProc, LPCTSTR lpClassName, LPCTSTR lpWindowTitle, int width, int height)
 {
 	this->lpClassName = lpClassName;
 	this->lpWindowTitle = lpWindowTitle;
 	this->wndProc = wndProc;
 	RegisterWindowClass();
+	//while (InitInstance(width, height) != true);
 	InitInstance(width, height);
 }
 
@@ -33,26 +34,32 @@ ATOM Window::RegisterWindowClass()
 	return RegisterClassExW(&wcex);
 }
 
-void Window::InitInstance(int width, int height)
+bool Window::InitInstance(int width, int height)
 {
-	hWnd = CreateWindowW(
+	hWnd = CreateWindow(
 		this->lpClassName,
 		this->lpWindowTitle,
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT,
-		0,
 		CW_USEDEFAULT,
-		0,
+		width,
+		height,
 		nullptr,
 		nullptr,
 		WindowManager::GetHInstance(),
 		nullptr);
+	if (!hWnd)
+	{
+		return false;
+	}
+	return true;
 }
 
 void Window::Show()
 {
 	MoveToCenter(hWnd);
 	ShowWindow(hWnd, WindowManager::GetNCmdShow());
+	UpdateWindow(hWnd);
 }
 
 void Window::Hide()

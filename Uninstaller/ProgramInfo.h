@@ -8,12 +8,14 @@ class ProgramInfo
 public:
 	ProgramInfo(
 		int indexInUninstallSection, 
+		tstring displayIcon,
 		tstring displayName, 
 		tstring uninstallString, 
 		DWORD size, 
 		tstring version, 
 		tstring installDate, 
 		tstring company);
+	tstring GetDisplayIcon();
 	tstring GetDisplayName();
 	tstring GetUninstallString();	
 	tstring GetSize();
@@ -24,6 +26,7 @@ public:
 	~ProgramInfo();
 private:
 	int indexInUninstallSection;
+	tstring displayIcon;
 	tstring displayName;
 	tstring uninstallString;
 	tstring size;

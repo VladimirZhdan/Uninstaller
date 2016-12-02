@@ -6,7 +6,8 @@
 class ProgramListView
 {
 public:
-	ProgramListView(int X, int Y, int nWidth, int nHeight, HWND hWndParent, HINSTANCE hInst);
+	ProgramListView(int X, int Y, int nWidth, int nHeight, HWND hWndParent, HINSTANCE hInst, RECT windowRect);
+	void ChangeSize(int newWidth, int newHeight);
 	~ProgramListView();
 
 private:
@@ -14,5 +15,10 @@ private:
 	void InitListLiew();
 	RegistryWorker *regWorker;
 	vector<ProgramInfo*> programs;
+	vector<int> programImageIndex;
+	double ratioX;
+	double ratioY;
+	double ratioNWidth;
+	double ratioNHeight;
 };
 
