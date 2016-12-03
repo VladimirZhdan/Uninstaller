@@ -16,9 +16,6 @@
     <Filter Include="Controls">
       <UniqueIdentifier>{826804ac-c509-4d9c-b86d-87165f626277}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Common">
-      <UniqueIdentifier>{db0e2cb0-d4f5-44af-a091-93db58acc524}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Windows">
       <UniqueIdentifier>{833358a1-acbc-401f-af03-c1ba375977e1}</UniqueIdentifier>
     </Filter>
@@ -27,6 +24,9 @@
     </Filter>
     <Filter Include="Registry">
       <UniqueIdentifier>{e3d6165c-e6f8-4df8-b2c1-0a58b68ffeb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Custom">
+      <UniqueIdentifier>{db0e2cb0-d4f5-44af-a091-93db58acc524}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -58,16 +58,16 @@
       <Filter>Controls</Filter>
     </ClInclude>
     <ClInclude Include="Convert.h">
-      <Filter>Common</Filter>
+      <Filter>Custom</Filter>
     </ClInclude>
     <ClInclude Include="CommonTTypes.h">
-      <Filter>Common</Filter>
+      <Filter>Custom</Filter>
     </ClInclude>
     <ClInclude Include="ErrorLogger.h">
-      <Filter>Common</Filter>
+      <Filter>Custom</Filter>
     </ClInclude>
     <ClInclude Include="FileLogic.h">
-      <Filter>Common</Filter>
+      <Filter>Custom</Filter>
     </ClInclude>
     <ClInclude Include="Window.h">
       <Filter>Windows</Filter>
@@ -86,6 +86,9 @@
     </ClInclude>
     <ClInclude Include="AboutDialog.h">
       <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="UninstallWindow.h">
+      <Filter>Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -108,13 +111,13 @@
       <Filter>Controls</Filter>
     </ClCompile>
     <ClCompile Include="Convert.cpp">
-      <Filter>Common</Filter>
+      <Filter>Custom</Filter>
     </ClCompile>
     <ClCompile Include="ErrorLogger.cpp">
-      <Filter>Common</Filter>
+      <Filter>Custom</Filter>
     </ClCompile>
     <ClCompile Include="FileLogic.cpp">
-      <Filter>Common</Filter>
+      <Filter>Custom</Filter>
     </ClCompile>
     <ClCompile Include="WindowManager.cpp">
       <Filter>Windows</Filter>
@@ -133,6 +136,9 @@
     </ClCompile>
     <ClCompile Include="Dialog.cpp">
       <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="UninstallWindow.cpp">
+      <Filter>Windows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

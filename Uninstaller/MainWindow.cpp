@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "MainWindow.h"
 
-MainWindow::MainWindow() : Window(MainWndProc, _T("UNINSTALLER"), _T("Uninstaller"), 800, 600)
+MainWindow::MainWindow() : Window(MainWndProc, _T("MAINWINDOW"), _T("MainWindow"), 800, 600)
 {
 	hMenu = LoadMenu(WindowManager::GetHInstance(), MAKEINTRESOURCE(IDC_UNINSTALLER));
 	SetMenu(hWnd, hMenu);
@@ -67,11 +67,7 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message,WPARAM wParam, LPARAM lPara
 	}
 	break;
 	case WM_SIZE:
-	{		
-		int newWidth = LOWORD(lParam);
-		int newHeight = HIWORD(lParam);
-		//SetWindowPos()
-		//MoveWindow()
+	{				
 		RECT clientRect;
 		GetClientRect(hWnd, &clientRect);
 		if (mainWindow != nullptr)

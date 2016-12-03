@@ -67,17 +67,47 @@ bool FileLogic::isTypeFile(tstring filePath, tstring extension)
 }
 
 HICON FileLogic::GetIconFromFile(tstring filePath)
-{	
+{		
+	unsigned int iconIndex;
+	tstring path = GetIconFilePathEx(filePath, iconIndex);
 	HICON result;
-	if (isIcoFile(filePath))
-	{
-		return (HICON)LoadImage(NULL, filePath.c_str(), IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
+	EraseQuotesFromPath(path);
+	if (isIcoFile(path))
+	{		
+		result = ExtractIcon(NULL, path.c_str(), iconIndex);
+		return result;
 	}
-	if (isExeFile(filePath))
+	if (isExeFile(path))
 	{
-		WORD indexIcon;		
+		WORD iconIndexWord = (WORD)iconIndex;		
+		result = ExtractAssociatedIcon(NULL, (TCHAR *)path.c_str(), &iconIndexWord);
+		return result;
+	}
+	return NULL;
+}
 
-		return ExtractAssociatedIcon(NULL, (TCHAR *)filePath.c_str(), &indexIcon);
+tstring FileLogic::GetIconFilePathEx(tstring filePath, unsigned int &iconIndex)
+{	
+	iconIndex = 0;
+	string tempPath = Convert::TStringToString(filePath);
+
+	/*string str = "\"C:\\uTorrent.exe\\\",0";*/
+	regex pat {R"(((.+)\,|.+)(\d+){0,1})"};
+	smatch mathes;
+	if (regex_search(tempPath, mathes, pat))
+	{		
+		string index = mathes[3];
+		string path;
+		if (index.length() != 0)
+		{
+			iconIndex = stoi(index);
+			path = mathes[2];			
+		}
+		else
+		{
+			path = mathes[1];
+		}
+		return Convert::StringToTString(path);		
 	}
 	return NULL;
 }
@@ -87,6 +117,7 @@ void FileLogic::GetIconFromFileEx(tstring filePath, HICON &smallIcon, HICON &lar
 	smallIcon = NULL;
 	largeIcon = NULL;
 	HICON result;
+	EraseQuotesFromPath(filePath);
 	if (isIcoFile(filePath))
 	{
 		smallIcon = (HICON)LoadImage(NULL, filePath.c_str(), IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
@@ -107,4 +138,17 @@ bool FileLogic::isMsiExecFile(tstring filePath)
 		return true;
 	}
 	return false;
+}
+
+void FileLogic::EraseQuotesFromPath(tstring &path)
+{
+	TCHAR quoteChar = _T('"');
+	if (path.length() > 0)
+	{
+		if (path[0] == quoteChar)
+		{
+			path.erase(path.end() - 1);
+			path.erase(path.begin());			
+		}
+	}
 }

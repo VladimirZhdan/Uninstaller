@@ -163,6 +163,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="CommonTTypes.h" />
     <ClInclude Include="Uninstaller.h" />
+    <ClInclude Include="UninstallWindow.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowManager.h" />
   </ItemGroup>
@@ -185,6 +186,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Uninstaller.cpp" />
+    <ClCompile Include="UninstallWindow.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="WindowManager.cpp" />
   </ItemGroup>

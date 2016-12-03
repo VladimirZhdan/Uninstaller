@@ -40,6 +40,22 @@ void RegistryWorker::SetProgramInfoVector()
 		DWORD error = GetLastError();
 		ErrorLogger::Log(error, _T("Close error\n"));		
 	}
+
+	lResult = RegOpenKeyEx(HKEY_CURRENT_USER, lpSubKey, 0, KEY_ENUMERATE_SUB_KEYS, &hUninstallSectionKey);
+
+	if (lResult != ERROR_SUCCESS)
+	{
+		DWORD error = GetLastError();
+		ErrorLogger::Log(error, _T("Key not found\n"));
+	}
+
+	InitializeProgramInfoVectorFromUninstallSection(hUninstallSectionKey);
+
+	if (RegCloseKey(hUninstallSectionKey) != ERROR_SUCCESS)
+	{
+		DWORD error = GetLastError();
+		ErrorLogger::Log(error, _T("Close error\n"));
+	}
 }
 
 void RegistryWorker::InitializeProgramInfoVectorFromUninstallSection(HKEY hUninstallSectionKey)
@@ -144,8 +160,10 @@ ProgramInfo* RegistryWorker::GetProgramInfoFromProgramSection(HKEY hProgramSecti
 		dataLength = STRING_LENGTH;
 		++parameterIndex;
 	}
+	int temp;
 
-	if (hasUninstallString)
+	// && (_tcscmp(company, _T("Microsoft Corporation")) != 0)
+	if (hasUninstallString && (_tcscmp(company, _T("Microsoft Corporation")) != 0))
 	{
 		if (size == 0)
 		{

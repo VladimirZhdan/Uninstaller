@@ -46,3 +46,13 @@ tstring Convert::ConvertDoubleToTString(double value)
 {	
 	return tstring(to_tstring(value));
 }
+
+tstring Convert::StringToTString(std::string value)
+{
+	return tstring(value.begin(), value.end());
+}
+
+std::string Convert::TStringToString(tstring value)
+{
+	return std::string(value.begin(), value.end());
+}

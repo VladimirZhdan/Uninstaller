@@ -49,6 +49,14 @@ void ProgramListView::InitListLiew()
 	{
 		int imageIndex;
 		listViewPrograms->AddImageToListViewImageList((TCHAR*)programs[i]->GetDisplayIcon().c_str(), imageIndex);
+		if (imageIndex == -1)
+		{
+			listViewPrograms->AddImageToListViewImageList((TCHAR*)programs[i]->GetUninstallString().c_str(), imageIndex);
+			if (imageIndex == -1)
+			{
+				listViewPrograms->AddImageToListViewImageList(_T("C:\\Windows\\SysWOW64\\\\msiexec.exe"), imageIndex);
+			}
+		}
 		programImageIndex.push_back(imageIndex);
 	}
 	listViewPrograms->InitListViewImageLists();
