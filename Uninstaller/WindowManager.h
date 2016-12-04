@@ -1,6 +1,6 @@
 #pragma once
 
-enum class WINDOW_TYPE { MAIN, UNINSTALL };
+enum class WINDOW_TYPE { NONE, MAIN, UNINSTALL };
 
 class Window;
 class MainWindow;
@@ -28,13 +28,15 @@ public:
 	}
 	static WindowManager* GetInstance();
 	Window* GetWindow(WINDOW_TYPE wndType);
-	void ShowWindow(WINDOW_TYPE wndType, bool hide_active = true);
+	void ShowWindow(WINDOW_TYPE wndType, bool isCloseActive = false);
 private:
 	static HINSTANCE hInstance;
 	static int nCmdShow;	
 	MainWindow *mainWindow;
 	UninstallWindow *uninstallWindow;	
 	Window *activeWindow;
+	WINDOW_TYPE activeWindowType;
+	void CloseActiveWindow();
 
 };
 

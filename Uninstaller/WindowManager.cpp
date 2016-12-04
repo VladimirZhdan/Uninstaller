@@ -14,12 +14,21 @@ WindowManager::WindowManager()
 {
 	mainWindow = NULL;
 	uninstallWindow = NULL;
+	activeWindow = NULL;
+	activeWindowType = WINDOW_TYPE::NONE;
 }
 
 
 WindowManager::~WindowManager()
 {
-	delete(mainWindow);
+	if (mainWindow != NULL)
+	{
+		delete(mainWindow);
+	}
+	if (uninstallWindow != NULL)
+	{
+		delete(uninstallWindow);
+	}
 }
 
 WindowManager * WindowManager::GetInstance()
@@ -49,16 +58,37 @@ Window * WindowManager::GetWindow(WINDOW_TYPE wndType)
 	}
 }
 
-void WindowManager::ShowWindow(WINDOW_TYPE wndType, bool hide_active)
+void WindowManager::ShowWindow(WINDOW_TYPE wndType, bool isCloseActive)
 {
 	Window* targetWindow = GetWindow(wndType);
-	if (hide_active)
+	if (isCloseActive)
 	{
-		if (activeWindow != NULL)
-		{
-			activeWindow->Hide();
-		}
+		CloseActiveWindow();
 	}
 	targetWindow->Show();
 	activeWindow = (Window*)targetWindow;
+	activeWindowType = wndType;
+}
+
+void WindowManager::CloseActiveWindow()
+{
+	if ((activeWindow != NULL) && (activeWindowType != WINDOW_TYPE::NONE))
+	{
+		activeWindow->Hide();
+		activeWindow = NULL;
+		switch (activeWindowType)
+		{
+		case WINDOW_TYPE::MAIN:
+			delete(mainWindow);
+			mainWindow = NULL;
+			break;
+		case WINDOW_TYPE::UNINSTALL:
+			delete(uninstallWindow);
+			uninstallWindow = NULL;
+			break;
+		default:
+			break;
+		}
+		activeWindowType = WINDOW_TYPE::NONE;
+	}
 }

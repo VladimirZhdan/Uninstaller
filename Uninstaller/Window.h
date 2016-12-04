@@ -13,14 +13,14 @@ typedef LRESULT(CALLBACK *WINDOW_PROC)(
 class Window
 {
 public:
-	Window(WINDOW_PROC wndProc, LPCTSTR lpClassName, LPCTSTR lpWindowName, int width, int height);
-	~Window();
+	Window(WINDOW_PROC wndProc, LPCTSTR lpClassName, LPCTSTR lpWindowName, DWORD dwWindowStyle, int width, int height, HWND hWndParent);
+	virtual ~Window();
 	HWND GetHwnd() const
 	{
 		return hWnd;
 	}
 	virtual void Show();
-	virtual void Hide();
+	virtual void Hide();	
 	static void MoveToCenter(HWND hWnd);
 protected:
 	static POINT screenCenter;
@@ -33,7 +33,7 @@ private:
 	LPCTSTR lpWindowTitle;
 	WINDOW_PROC wndProc;
 	ATOM RegisterWindowClass();
-	bool InitInstance(int width, int height);
+	bool InitInstance(DWORD dwWindowStyle, int width, int height, HWND hWndParent);
 
 };
 

@@ -7,6 +7,7 @@ class UninstallWindow : public Window
 {
 public:
 	UninstallWindow();
+	void CloseWindow();
 	~UninstallWindow();
 private:
 	void Init();
