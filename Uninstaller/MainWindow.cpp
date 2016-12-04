@@ -35,6 +35,7 @@ void MainWindow::Init()
 void MainWindow::OpenUninstallWindow(ProgramInfo * program)
 {
 	WindowManager *windowManager = WindowManager::GetInstance();
+	windowManager->SetUninstallProgram(program);
 	windowManager->ShowWindow(WINDOW_TYPE::UNINSTALL);
 }
 

@@ -16,6 +16,7 @@ WindowManager::WindowManager()
 	uninstallWindow = NULL;
 	activeWindow = NULL;
 	activeWindowType = WINDOW_TYPE::NONE;
+	currentUninstallProgram = NULL;
 }
 
 
@@ -48,9 +49,9 @@ Window * WindowManager::GetWindow(WINDOW_TYPE wndType)
 		}
 		return mainWindow;
 	case WINDOW_TYPE::UNINSTALL:
-		if (uninstallWindow == NULL)
+		if (uninstallWindow == NULL && (currentUninstallProgram != NULL))
 		{
-			uninstallWindow = new UninstallWindow();
+			uninstallWindow = new UninstallWindow(currentUninstallProgram);
 		}		
 		return uninstallWindow;
 	default:
@@ -70,6 +71,19 @@ void WindowManager::ShowWindow(WINDOW_TYPE wndType, bool isCloseActive)
 	activeWindowType = wndType;
 }
 
+bool WindowManager::SetUninstallProgram(ProgramInfo * uninstallProgram)
+{
+	if (currentUninstallProgram == NULL)
+	{
+		currentUninstallProgram = uninstallProgram;
+		return true;
+	}
+	else
+	{
+		return false;
+	}	
+}
+
 void WindowManager::CloseActiveWindow()
 {
 	if ((activeWindow != NULL) && (activeWindowType != WINDOW_TYPE::NONE))
@@ -85,6 +99,7 @@ void WindowManager::CloseActiveWindow()
 		case WINDOW_TYPE::UNINSTALL:
 			delete(uninstallWindow);
 			uninstallWindow = NULL;
+			currentUninstallProgram = NULL;
 			break;
 		default:
 			break;

@@ -13,7 +13,8 @@ ListView::ListView(int X, int Y, int nWidth, int nHeight, HWND hWndParent, HINST
 		hWndParent,
 		NULL,
 		hInst,
-		NULL);
+		NULL
+	);
 	countCols = 0;
 	countRows = 0;
 

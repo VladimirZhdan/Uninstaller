@@ -91,7 +91,7 @@
       <Filter>Windows</Filter>
     </ClInclude>
     <ClInclude Include="StaticText.h">
-      <Filter>Заголовочные файлы</Filter>
+      <Filter>Controls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -144,7 +144,7 @@
       <Filter>Windows</Filter>
     </ClCompile>
     <ClCompile Include="StaticText.cpp">
-      <Filter>Файлы исходного кода</Filter>
+      <Filter>Controls</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
