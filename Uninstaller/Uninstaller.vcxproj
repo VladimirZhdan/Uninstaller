@@ -148,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AboutDialog.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Convert.h" />
     <ClInclude Include="Dialog.h" />
     <ClInclude Include="DialogManager.h" />
@@ -170,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AboutDialog.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Convert.cpp" />
     <ClCompile Include="Dialog.cpp" />
     <ClCompile Include="DialogManager.cpp" />

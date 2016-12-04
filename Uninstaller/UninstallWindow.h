@@ -4,6 +4,11 @@
 #include "WindowManager.h"
 #include "StaticText.h"
 #include "ProgramInfo.h"
+#include "Button.h"
+
+#define ID_BTN_INSTALL	1000
+#define ID_BTN_OK		1001
+#define ID_BTN_CANCEL	1002
 
 class UninstallWindow : public Window
 {
@@ -21,8 +26,12 @@ private:
 		WPARAM,
 		LPARAM
 	);	
+	//Controls
 	StaticText *labelProgramName;
 	StaticText *programName;
 	ProgramInfo *currentUninstallProgram;
+	Button *btnRemove;
+	Button *btnOK;
+	Button *btnCancel;
 };
 

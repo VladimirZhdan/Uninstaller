@@ -6,7 +6,7 @@ StaticText::StaticText(int X, int Y, int nWidth, int nHeight, HWND hWndParent, H
 {
 	hStaticText = CreateWindowEx(
 		0,
-		(LPCWSTR)WC_EDIT, NULL, WS_VISIBLE | WS_CHILD | ES_LEFT | ES_READONLY | ES_MULTILINE,
+		(LPCWSTR)WC_EDIT, NULL, WS_VISIBLE | WS_CHILD | ES_READONLY | ES_MULTILINE,
 		X,
 		Y,
 		nWidth,

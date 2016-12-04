@@ -93,6 +93,9 @@
     <ClInclude Include="StaticText.h">
       <Filter>Controls</Filter>
     </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Controls</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -144,6 +147,9 @@
       <Filter>Windows</Filter>
     </ClCompile>
     <ClCompile Include="StaticText.cpp">
+      <Filter>Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
       <Filter>Controls</Filter>
     </ClCompile>
   </ItemGroup>

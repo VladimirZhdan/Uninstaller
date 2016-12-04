@@ -11,6 +11,8 @@ UninstallWindow::UninstallWindow(ProgramInfo *program) : Window(UninstallWndProc
 UninstallWindow::~UninstallWindow()
 {
 	delete(programName);
+	delete(labelProgramName);
+	delete(btnRemove);
 }
 
 void UninstallWindow::Init()
@@ -23,6 +25,15 @@ void UninstallWindow::Init()
 
 	programName = new StaticText(30, 30, clientRect.right - 40 - GetSystemMetrics(SM_CXBORDER), 80, hWnd, WindowManager::GetHInstance());
 	programName->SetText((TCHAR *)currentUninstallProgram->GetDisplayName().c_str());	
+
+	btnRemove = new Button(140, 200, clientRect.right - 280 - GetSystemMetrics(SM_CXBORDER), 30, hWnd, ID_BTN_INSTALL, WindowManager::GetHInstance(), _T("Удалить"));
+	btnRemove->SetEnabled(true);
+
+	btnOK = new Button(10, 200, 100, 30, hWnd, ID_BTN_OK, WindowManager::GetHInstance(), _T("OK"));
+	btnOK->SetEnabled(false);
+
+	btnCancel = new Button(275, 200, 100, 30, hWnd, ID_BTN_CANCEL, WindowManager::GetHInstance(), _T("Отмена"));
+	btnCancel->SetEnabled(true);
 }
 
 void UninstallWindow::CloseWindow()
@@ -39,6 +50,7 @@ void UninstallWindow::SetParams(ProgramInfo * program)
 
 LRESULT CALLBACK UninstallWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	int wmId, wmEvent;
 	switch (message)
 	{
 	case WM_CREATE:
@@ -56,6 +68,25 @@ LRESULT CALLBACK UninstallWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM
 	}
 	case WM_COMMAND:
 	{		
+		wmId = LOWORD(wParam);
+		wmEvent = HIWORD(wParam);
+		if (wmEvent == BN_CLICKED)
+		{
+			int i;
+			switch (wmId)
+			{
+			case ID_BTN_INSTALL:
+				i = 0;
+				break;
+			case ID_BTN_OK:
+				i = 1;
+				break;
+
+			case ID_BTN_CANCEL:
+				//SendMessage(hWnd, WM_DESTROY, NULL, NULL);
+				break;
+			}
+		}
 	}
 	break;
 	case WM_SIZE:
