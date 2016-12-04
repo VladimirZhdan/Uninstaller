@@ -5,7 +5,7 @@ bool UninstallWindow::isTerminateWaitingUninstallProgramThread = true;
 bool UninstallWindow::isCurrentProgramUninstalled = false;
 HANDLE UninstallWindow::hMutex = CreateMutex(NULL, FALSE, NULL);
 
-UninstallWindow::UninstallWindow(ProgramInfo *program) : Window(UninstallWndProc, _T("UNINSTALLWINDOW"), _T("Удаление"), WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX, 400, 300, WindowManager::GetInstance()->GetWindow(WINDOW_TYPE::MAIN)->GetHwnd())
+UninstallWindow::UninstallWindow(ProgramInfo *program) : Window(UninstallWndProc, _T("UNINSTALLWINDOW"), _T("Удаление"), WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX, 400, 200, WindowManager::GetInstance()->GetWindow(WINDOW_TYPE::MAIN)->GetHwnd())
 {
 	SetParams(program);
 	Init();
@@ -27,18 +27,18 @@ void UninstallWindow::Init()
 	labelProgramName = new StaticText(10, 10, clientRect.right - 20 - GetSystemMetrics(SM_CXBORDER), 30, hWnd, WindowManager::GetHInstance());		
 	labelProgramName->SetText(_T("Удаление программы:"));
 
-	programName = new StaticText(30, 30, clientRect.right - 40 - GetSystemMetrics(SM_CXBORDER), 80, hWnd, WindowManager::GetHInstance());
+	programName = new StaticText(30, 30, clientRect.right - 40 - GetSystemMetrics(SM_CXBORDER), 40, hWnd, WindowManager::GetHInstance());
 	programName->SetText((TCHAR *)currentUninstallProgram->GetDisplayName().c_str());	
 
-	uninstallStatus = new StaticText(10, 150, clientRect.right - 40 - GetSystemMetrics(SM_CXBORDER), 20, hWnd, WindowManager::GetHInstance());
+	uninstallStatus = new StaticText(10, 70, clientRect.right - 20 - GetSystemMetrics(SM_CXBORDER), 20, hWnd, WindowManager::GetHInstance());
 
-	btnRemove = new Button(140, 200, clientRect.right - 280 - GetSystemMetrics(SM_CXBORDER), 30, hWnd, ID_BTN_INSTALL, WindowManager::GetHInstance(), _T("Удалить"));
+	btnRemove = new Button(140, 100, clientRect.right - 280 - GetSystemMetrics(SM_CXBORDER), 30, hWnd, ID_BTN_UNINSTALL, WindowManager::GetHInstance(), _T("Удалить"));
 	btnRemove->SetEnabled(true);
 
-	btnOK = new Button(10, 200, 100, 30, hWnd, ID_BTN_OK, WindowManager::GetHInstance(), _T("OK"));
+	btnOK = new Button(10, 100, 100, 30, hWnd, ID_BTN_OK, WindowManager::GetHInstance(), _T("OK"));
 	btnOK->SetEnabled(false);
 
-	btnCancel = new Button(275, 200, 100, 30, hWnd, ID_BTN_CANCEL, WindowManager::GetHInstance(), _T("Отмена"));
+	btnCancel = new Button(275, 100, 100, 30, hWnd, ID_BTN_CANCEL, WindowManager::GetHInstance(), _T("Отмена"));
 	btnCancel->SetEnabled(true);
 }
 
@@ -122,17 +122,6 @@ void UninstallWindow::CancelUninstallingProgram()
 	ReleaseMutex(hMutex);
 }
 
-//DWORD WINAPI WaitingUninstallProgramThreadFunc(LPVOID param)
-//{
-//	ProgramInfo *currentUninstallProgram = (ProgramInfo *)param;
-//	bool isProgramExist = true;
-//	while (isProgramExist && (!UninstallWindow::isTerminateWaitingUninstallProgramThread))
-//	{
-//		isProgramExist = RegistryWorker::CheckExistProgramInRegister(currentUninstallProgram);
-//	}
-//	return isProgramExist;		
-//}
-
 
 void UninstallWindow::RunProgram(tstring programPath)
 {
@@ -174,9 +163,9 @@ LRESULT CALLBACK UninstallWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM
 	{
 		LPMINMAXINFO lpMMI = (LPMINMAXINFO)lParam;
 		lpMMI->ptMinTrackSize.x = 400;
-		lpMMI->ptMinTrackSize.y = 300;
+		lpMMI->ptMinTrackSize.y = 180;
 		lpMMI->ptMaxTrackSize.x = 400;
-		lpMMI->ptMaxTrackSize.y = 300;
+		lpMMI->ptMaxTrackSize.y = 180;
 	}
 	case WM_COMMAND:
 	{		
@@ -187,10 +176,13 @@ LRESULT CALLBACK UninstallWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM
 			int i;
 			switch (wmId)
 			{
-			case ID_BTN_INSTALL:
+			case ID_BTN_UNINSTALL:
 				{
-					UninstallWindow *uninstallWindow = (UninstallWindow*)((WindowManager::GetInstance())->GetWindow(WINDOW_TYPE::UNINSTALL));
-					uninstallWindow->RunUninstallProgram();
+					WindowManager *windowManager = WindowManager::GetInstance();									
+					MainWindow *mainWindow = (MainWindow*)(windowManager->GetWindow(WINDOW_TYPE::MAIN));
+					mainWindow->SetNeedRefresh();
+					UninstallWindow *uninstallWindow = (UninstallWindow*)(windowManager->GetWindow(WINDOW_TYPE::UNINSTALL));
+					uninstallWindow->RunUninstallProgram();					
 				}				
 				break;
 			case ID_BTN_OK:

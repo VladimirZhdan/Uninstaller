@@ -59,6 +59,7 @@ void Window::Show()
 	MoveToCenter(hWnd);
 	ShowWindow(hWnd, WindowManager::GetNCmdShow());
 	UpdateWindow(hWnd);
+	InvalidateRect(hWnd, NULL, TRUE);
 }
 
 void Window::Hide()

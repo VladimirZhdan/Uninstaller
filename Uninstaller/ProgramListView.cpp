@@ -49,7 +49,7 @@ ProgramInfo *ProgramListView::GetSelectedItem()
 	return programs[selectedRow];	
 }
 
-void ProgramListView::InitListLiew()
+void ProgramListView::InitListLiew(bool isRefresh)
 {				
 	for (int i = 0; i < programs.size(); ++i)
 	{
@@ -67,13 +67,15 @@ void ProgramListView::InitListLiew()
 	}
 	listViewPrograms->InitListViewImageLists();
 
-	//Inserting Columns	
-	listViewPrograms->AddColumn(_T("Приложение"), 0.3);
-	listViewPrograms->AddColumn(_T("Размер"), 0.2);
-	listViewPrograms->AddColumn(_T("Версия"), 0.15);
-	listViewPrograms->AddColumn(_T("Тип"), 0.05);
-	listViewPrograms->AddColumn(_T("Дата установки"), 0.10);
-	listViewPrograms->AddColumn(_T("Компания"), 0.2);
+	if (!isRefresh)
+	{
+		//Inserting Columns	
+		listViewPrograms->AddColumn(_T("Приложение"), 0.3);
+		listViewPrograms->AddColumn(_T("Размер"), 0.2);
+		listViewPrograms->AddColumn(_T("Версия"), 0.2);		
+		listViewPrograms->AddColumn(_T("Дата установки"), 0.10);
+		listViewPrograms->AddColumn(_T("Компания"), 0.2);
+	}
 
 	for (int i = 0; i < programs.size(); ++i)
 	{
@@ -81,13 +83,18 @@ void ProgramListView::InitListLiew()
 		listViewPrograms->InsertNewRowWithFirstColumn((TCHAR*)programs[i]->GetDisplayName().c_str(), programImageIndex[i], currentRow);
 				
 		listViewPrograms->SetItem(currentRow, 1, (TCHAR*)programs[i]->GetSize().c_str());
-		listViewPrograms->SetItem(currentRow, 2, (TCHAR*)programs[i]->GetVersion().c_str());
-		//listViewPrograms->SetItem(currentRow, 3, (TCHAR*)programs[i]->GetUninstallString().c_str());
-		listViewPrograms->SetItem(currentRow, 4, (TCHAR*)programs[i]->GetInstallDate().c_str());
-		listViewPrograms->SetItem(currentRow, 5, (TCHAR*)programs[i]->GetCompany().c_str());
+		listViewPrograms->SetItem(currentRow, 2, (TCHAR*)programs[i]->GetVersion().c_str());		
+		listViewPrograms->SetItem(currentRow, 3, (TCHAR*)programs[i]->GetInstallDate().c_str());
+		listViewPrograms->SetItem(currentRow, 4, (TCHAR*)programs[i]->GetCompany().c_str());
 	}
 }
 
+void ProgramListView::Refresh()
+{	
+	programs = regWorker->GetProgramInfoVectorFromRegistry();	
+	listViewPrograms->Clear();
+	InitListLiew(false);
+}
 
 ProgramListView::~ProgramListView()
 {

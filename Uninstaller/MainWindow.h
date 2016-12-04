@@ -16,6 +16,7 @@ public:
 	~MainWindow();
 	void Show();
 	void Hide();
+	void SetNeedRefresh();
 protected:
 	//controls
 	ProgramListView *listViewPrograms;
@@ -31,5 +32,6 @@ protected:
 		LPARAM
 	);	
 	//fields	
+	bool needRefresh;
 };
 

@@ -18,8 +18,10 @@ public:
 	int GetCountColumns();
 	void ChangeSize(int newX, int newY, int newWidth, int newHeight);
 	int GetSelectedRow();
+	void Clear();
 	~ListView();
 private:
+	void InitParamsWithStartValue();
 	HWND hListView;	
 	LVITEM lvItem;
 	LVCOLUMN lvCol;	

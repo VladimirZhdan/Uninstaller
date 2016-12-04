@@ -6,6 +6,7 @@ MainWindow::MainWindow() : Window(MainWndProc, _T("MAINWINDOW"), _T("Деинсталлят
 	hMenu = LoadMenu(WindowManager::GetHInstance(), MAKEINTRESOURCE(IDC_UNINSTALLER));
 	SetMenu(hWnd, hMenu);
 	Init();
+	needRefresh = false;
 }
 
 
@@ -17,12 +18,22 @@ MainWindow::~MainWindow()
 void MainWindow::Show()
 {
 	//Refrech controls
+	if (needRefresh)
+	{
+		listViewPrograms->Refresh();
+		needRefresh = false;
+	}	
 	Window::Show();
 }
 
 void MainWindow::Hide()
 {
 	Window::Hide();
+}
+
+void MainWindow::SetNeedRefresh()
+{
+	needRefresh = true;
 }
 
 void MainWindow::Init()

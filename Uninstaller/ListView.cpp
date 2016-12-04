@@ -14,20 +14,24 @@ ListView::ListView(int X, int Y, int nWidth, int nHeight, HWND hWndParent, HINST
 		NULL,
 		hInst,
 		NULL
-	);
-	countCols = 0;
-	countRows = 0;
-
-	memset(&lvCol, 0, sizeof(lvCol)); 
-	lvCol.mask = LVCF_TEXT | LVCF_WIDTH | LVCF_SUBITEM | LVCF_FMT; 	
-	lvCol.fmt = LVCFMT_CENTER;
-
-	memset(&lvItem, 0, sizeof(lvItem));	 
-	lvItem.cchTextMax = 256; 		
-
+	);			
 	SendMessage(hListView, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT); // Set style	
 	hLarge = ImageList_Create(64, 64, ILC_MASK | ILC_COLORDDB, 300, 1);
 	hSmall = ImageList_Create(32, 32, ILC_MASK | ILC_COLORDDB, 300, 1);
+	InitParamsWithStartValue();
+}
+
+void ListView::InitParamsWithStartValue()
+{
+	countCols = 0;
+	countRows = 0;
+
+	memset(&lvCol, 0, sizeof(lvCol));
+	lvCol.mask = LVCF_TEXT | LVCF_WIDTH | LVCF_SUBITEM | LVCF_FMT;
+	lvCol.fmt = LVCFMT_CENTER;
+
+	memset(&lvItem, 0, sizeof(lvItem));
+	lvItem.cchTextMax = 256;
 }
 
 HWND ListView::GetHWND()
@@ -112,6 +116,18 @@ int ListView::GetSelectedRow()
 	int selectedItemNumber;
 	selectedItemNumber = SendMessage(hListView, LVM_GETSELECTIONMARK, NULL, NULL);	
 	return selectedItemNumber;
+}
+
+void ListView::Clear()
+{
+	SendMessage(hListView, LVM_DELETEALLITEMS, NULL, NULL);	
+	for (int i = countCols - 1; i >= 0; --i)
+	{
+		ListView_DeleteColumn(hListView, i);
+	}	
+	ImageList_RemoveAll(hSmall);
+	ImageList_RemoveAll(hLarge);
+	InitParamsWithStartValue();	
 }
 
 ListView::~ListView()

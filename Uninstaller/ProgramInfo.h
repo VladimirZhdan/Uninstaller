@@ -19,8 +19,7 @@ public:
 	tstring GetDisplayName();
 	tstring GetUninstallString();	
 	tstring GetSize();
-	tstring GetVersion();
-	//tstring GetType;
+	tstring GetVersion();	
 	tstring GetInstallDate();
 	tstring GetCompany();
 	bool Compare(ProgramInfo *obj);
@@ -31,8 +30,7 @@ private:
 	tstring displayName;
 	tstring uninstallString;
 	tstring size;
-	tstring version;
-	//tstring type;
+	tstring version;	
 	tstring installDate;
 	tstring company;	
 };

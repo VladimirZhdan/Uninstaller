@@ -9,8 +9,9 @@
 #include "ErrorLogger.h"
 #include "RegistryWorker.h"
 #include <process.h>
+#include "MainWindow.h"
 
-#define ID_BTN_INSTALL	1000
+#define ID_BTN_UNINSTALL	1000
 #define ID_BTN_OK		1001
 #define ID_BTN_CANCEL	1002
 
