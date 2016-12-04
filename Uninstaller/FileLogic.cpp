@@ -152,3 +152,16 @@ void FileLogic::EraseQuotesFromPath(tstring &path)
 		}
 	}
 }
+
+void FileLogic::AddQuotesToPath(tstring &path)
+{
+	TCHAR quoteChar = _T('"');
+	if (path.length() > 0)
+	{
+		if (path[0] != quoteChar)
+		{			
+			path.insert(path.begin(), quoteChar);
+			path.insert(path.end(), quoteChar);
+		}
+	}
+}

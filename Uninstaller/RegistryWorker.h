@@ -17,6 +17,7 @@ public:
 	RegistryWorker();
 	vector<ProgramInfo*> GetProgramInfoVectorFromRegistry();
 	void RefreshProgramInfoVector();
+	static bool CheckExistProgramInRegister(ProgramInfo *programInfo);
 	~RegistryWorker();
 
 private:
@@ -25,7 +26,6 @@ private:
 	ProgramInfo* GetProgramInfoFromProgramSection(HKEY hProgramSectionKey, DWORD programSectionIndex);
 	void ClearProgramInfoVector();	
 	DWORD GetDwordFromBytes(BYTE *source);
-	vector<ProgramInfo*> programInfoVector;	
-	
+	vector<ProgramInfo*> programInfoVector;		
 };
 

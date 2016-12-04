@@ -1,6 +1,10 @@
 #include "stdafx.h"
 #include "UninstallWindow.h"
 
+bool UninstallWindow::isTerminateWaitingUninstallProgramThread = true;
+bool UninstallWindow::isCurrentProgramUninstalled = false;
+HANDLE UninstallWindow::hMutex = CreateMutex(NULL, FALSE, NULL);
+
 UninstallWindow::UninstallWindow(ProgramInfo *program) : Window(UninstallWndProc, _T("UNINSTALLWINDOW"), _T("Удаление"), WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX, 400, 300, WindowManager::GetInstance()->GetWindow(WINDOW_TYPE::MAIN)->GetHwnd())
 {
 	SetParams(program);
@@ -26,6 +30,8 @@ void UninstallWindow::Init()
 	programName = new StaticText(30, 30, clientRect.right - 40 - GetSystemMetrics(SM_CXBORDER), 80, hWnd, WindowManager::GetHInstance());
 	programName->SetText((TCHAR *)currentUninstallProgram->GetDisplayName().c_str());	
 
+	uninstallStatus = new StaticText(10, 150, clientRect.right - 40 - GetSystemMetrics(SM_CXBORDER), 20, hWnd, WindowManager::GetHInstance());
+
 	btnRemove = new Button(140, 200, clientRect.right - 280 - GetSystemMetrics(SM_CXBORDER), 30, hWnd, ID_BTN_INSTALL, WindowManager::GetHInstance(), _T("Удалить"));
 	btnRemove->SetEnabled(true);
 
@@ -45,6 +51,112 @@ void UninstallWindow::CloseWindow()
 void UninstallWindow::SetParams(ProgramInfo * program)
 {
 	this->currentUninstallProgram = program;
+}
+
+void UninstallWindow::RunUninstallProgram()
+{
+	if (currentUninstallProgram != nullptr)
+	{
+		RunProgram(currentUninstallProgram->GetUninstallString());
+	}	
+	
+	WaitForSingleObject(UninstallWindow::hMutex, INFINITE);
+
+	isTerminateWaitingUninstallProgramThread = false;
+	unsigned int hThread = _beginthreadex(NULL, 0, WaitingUninstallProgramThreadFunc, this, 0, NULL);	
+	btnRemove->SetEnabled(false);
+	uninstallStatus->SetText(_T("Ожидание завершения удаления..."));
+
+	ReleaseMutex(UninstallWindow::hMutex);
+}
+
+unsigned __stdcall WaitingUninstallProgramThreadFunc(void* param)
+{
+	UninstallWindow *thisWindow = (UninstallWindow*)param;
+	ProgramInfo *currentUninstallProgram = thisWindow->currentUninstallProgram;
+	bool isProgramExist = true;
+	bool isTerminateThread;
+	do
+	{
+		Sleep(1000);
+		WaitForSingleObject(UninstallWindow::hMutex, INFINITE);
+
+		isTerminateThread = UninstallWindow::isTerminateWaitingUninstallProgramThread;
+		if (!isTerminateThread)
+		{
+			isProgramExist = RegistryWorker::CheckExistProgramInRegister(currentUninstallProgram);
+		}		
+		UninstallWindow::isCurrentProgramUninstalled = (!isProgramExist);
+
+		ReleaseMutex(UninstallWindow::hMutex);
+	} while (isProgramExist && (!isTerminateThread));	
+
+	if (!isProgramExist)
+	{
+		thisWindow->FinishUninstallingProgram();
+	}
+	return 0;
+}
+
+void UninstallWindow::FinishUninstallingProgram()
+{
+	btnCancel->SetEnabled(false);
+	btnOK->SetEnabled(true);
+	uninstallStatus->SetText(_T("Программа успешна удалена"));
+}
+
+void UninstallWindow::CancelUninstallingProgram()
+{
+	WaitForSingleObject(hMutex, INFINITE);
+	if (!isTerminateWaitingUninstallProgramThread)
+	{
+		isTerminateWaitingUninstallProgramThread = true;
+	}
+	if (!isCurrentProgramUninstalled)
+	{
+		btnRemove->SetEnabled(false);
+		btnCancel->SetEnabled(false);
+		btnOK->SetEnabled(true);
+		uninstallStatus->SetText(_T("Деинталляция отменена"));
+	}	
+	ReleaseMutex(hMutex);
+}
+
+//DWORD WINAPI WaitingUninstallProgramThreadFunc(LPVOID param)
+//{
+//	ProgramInfo *currentUninstallProgram = (ProgramInfo *)param;
+//	bool isProgramExist = true;
+//	while (isProgramExist && (!UninstallWindow::isTerminateWaitingUninstallProgramThread))
+//	{
+//		isProgramExist = RegistryWorker::CheckExistProgramInRegister(currentUninstallProgram);
+//	}
+//	return isProgramExist;		
+//}
+
+
+void UninstallWindow::RunProgram(tstring programPath)
+{
+	tstring pathTemp(programPath);
+	FileLogic::AddQuotesToPath(pathTemp);
+	TCHAR *path = (TCHAR *)pathTemp.c_str();
+	STARTUPINFO startUpInf = { sizeof(startUpInf) };
+	PROCESS_INFORMATION processInf;
+	DWORD exitCode;
+	
+	bool isProcessCreated = CreateProcess(NULL, path, NULL, NULL, FALSE, 0, NULL, NULL, &startUpInf, &processInf);
+	if (isProcessCreated)
+	{
+		WaitForSingleObject(processInf.hThread, INFINITE);
+		CloseHandle(processInf.hThread);
+		WaitForSingleObject(processInf.hProcess, INFINITE);
+		GetExitCodeProcess(processInf.hProcess, &exitCode);
+		CloseHandle(processInf.hProcess);
+	}
+	else
+	{
+		DWORD error = GetLastError();
+		ErrorLogger::Log(error, _T("Can't create process\n"));
+	}		
 }
 
 
@@ -76,14 +188,20 @@ LRESULT CALLBACK UninstallWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM
 			switch (wmId)
 			{
 			case ID_BTN_INSTALL:
-				i = 0;
+				{
+					UninstallWindow *uninstallWindow = (UninstallWindow*)((WindowManager::GetInstance())->GetWindow(WINDOW_TYPE::UNINSTALL));
+					uninstallWindow->RunUninstallProgram();
+				}				
 				break;
 			case ID_BTN_OK:
-				i = 1;
+				SendMessage(hWnd, WM_DESTROY, NULL, NULL);
 				break;
 
 			case ID_BTN_CANCEL:
-				//SendMessage(hWnd, WM_DESTROY, NULL, NULL);
+				{
+					UninstallWindow *uninstallWindow = (UninstallWindow*)((WindowManager::GetInstance())->GetWindow(WINDOW_TYPE::UNINSTALL));
+					uninstallWindow->CancelUninstallingProgram();
+				}				
 				break;
 			}
 		}

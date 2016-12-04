@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "MainWindow.h"
 
-MainWindow::MainWindow() : Window(MainWndProc, _T("MAINWINDOW"), _T("Деинсталятор"), WS_OVERLAPPEDWINDOW, 800, 600, nullptr)
+MainWindow::MainWindow() : Window(MainWndProc, _T("MAINWINDOW"), _T("Деинсталлятор"), WS_OVERLAPPEDWINDOW, 800, 600, nullptr)
 {
 	hMenu = LoadMenu(WindowManager::GetHInstance(), MAKEINTRESOURCE(IDC_UNINSTALLER));
 	SetMenu(hWnd, hMenu);

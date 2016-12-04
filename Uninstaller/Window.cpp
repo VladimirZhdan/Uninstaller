@@ -95,4 +95,5 @@ POINT Window::GetHwndCenter(HWND hWnd)
 
 Window::~Window()
 {
+	DestroyWindow(hWnd);
 }

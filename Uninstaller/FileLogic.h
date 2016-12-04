@@ -22,6 +22,7 @@ public:
 	static bool isIcoFile(tstring filePath);
 	static bool isExeFile(tstring filePath);
 	static void EraseQuotesFromPath(tstring &path);
+	static void AddQuotesToPath(tstring &path);
 private:
 	static bool isTypeFile(tstring filePath, tstring extension);
 };

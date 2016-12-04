@@ -17,6 +17,22 @@ void RegistryWorker::RefreshProgramInfoVector()
 	SetProgramInfoVector();
 }
 
+bool RegistryWorker::CheckExistProgramInRegister(ProgramInfo * programInfo)
+{
+	bool result = false;
+	RegistryWorker *tempRegWorker = new RegistryWorker();
+	vector<ProgramInfo*> programs = tempRegWorker->GetProgramInfoVectorFromRegistry();	
+	for (int i = 0; (i < programs.size()) && (!result); ++i)
+	{
+		if (programInfo->Compare(programs[i]) == true)
+		{
+			result = true;			
+		}
+	}	
+	delete tempRegWorker;
+	return result;
+}
+
 void RegistryWorker::SetProgramInfoVector()
 {
 	ClearProgramInfoVector();

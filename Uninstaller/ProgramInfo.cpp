@@ -57,6 +57,47 @@ tstring ProgramInfo::GetCompany()
 	return this->company;
 }
 
+bool ProgramInfo::Compare(ProgramInfo * obj)
+{
+	if (obj == NULL)
+	{
+		return false;
+	}
+	if (this == obj)
+	{
+		return true;
+	}	
+	if (this->displayIcon != obj->displayIcon)
+	{
+		return false;
+	}
+	if (this->displayName != obj->displayName)
+	{
+		return false;
+	}
+	if (this->uninstallString != obj->uninstallString)
+	{
+		return false;
+	}
+	if (this->size != obj->size)
+	{
+		return false;
+	}
+	if (this->version != obj->version)
+	{
+		return false;
+	}
+	if (this->installDate != obj->installDate)
+	{
+		return false;
+	}
+	if (this->company != obj->company)
+	{
+		return false;
+	}
+	return true;
+}
+
 ProgramInfo::~ProgramInfo()
 {
 }

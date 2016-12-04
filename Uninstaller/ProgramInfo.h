@@ -23,6 +23,7 @@ public:
 	//tstring GetType;
 	tstring GetInstallDate();
 	tstring GetCompany();
+	bool Compare(ProgramInfo *obj);
 	~ProgramInfo();
 private:
 	int indexInUninstallSection;
