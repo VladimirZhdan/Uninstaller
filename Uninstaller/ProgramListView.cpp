@@ -43,6 +43,12 @@ void ProgramListView::ChangeSize(int newWidth, int newHeight)
 	listViewPrograms->ChangeSize(x, y, nWidht, nHeight);
 }
 
+ProgramInfo *ProgramListView::GetSelectedItem()
+{
+	int selectedRow = listViewPrograms->GetSelectedRow();
+	return programs[selectedRow];	
+}
+
 void ProgramListView::InitListLiew()
 {				
 	for (int i = 0; i < programs.size(); ++i)

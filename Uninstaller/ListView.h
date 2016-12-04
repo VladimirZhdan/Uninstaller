@@ -17,6 +17,7 @@ public:
 	void SetItem(int rowIndex, int columnIndex, TCHAR* value);
 	int GetCountColumns();
 	void ChangeSize(int newX, int newY, int newWidth, int newHeight);
+	int GetSelectedRow();
 	~ListView();
 private:
 	HWND hListView;	

@@ -22,6 +22,7 @@ protected:
 	HMENU hMenu;
 	//methods
 	void Init();
+	void OpenUninstallWindow(ProgramInfo *program);
 	//friends procs
 	friend LRESULT CALLBACK MainWndProc(
 		HWND,

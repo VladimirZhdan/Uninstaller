@@ -4,6 +4,7 @@ enum class WINDOW_TYPE { MAIN, UNINSTALL };
 
 class Window;
 class MainWindow;
+class UninstallWindow;
 
 
 
@@ -32,7 +33,7 @@ private:
 	static HINSTANCE hInstance;
 	static int nCmdShow;	
 	MainWindow *mainWindow;
-	//UnInstallWindow *unInstallWindow;
+	UninstallWindow *uninstallWindow;	
 	Window *activeWindow;
 
 };

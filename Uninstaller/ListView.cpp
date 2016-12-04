@@ -106,6 +106,13 @@ void ListView::ChangeSize(int newX, int newY, int newWidth, int newHeight)
 	}	
 }
 
+int ListView::GetSelectedRow()
+{
+	int selectedItemNumber;
+	selectedItemNumber = SendMessage(hListView, LVM_GETSELECTIONMARK, NULL, NULL);	
+	return selectedItemNumber;
+}
+
 ListView::~ListView()
 {
 	ImageList_Destroy(hLarge);

@@ -8,6 +8,7 @@ class ProgramListView
 public:
 	ProgramListView(int X, int Y, int nWidth, int nHeight, HWND hWndParent, HINSTANCE hInst, RECT windowRect);
 	void ChangeSize(int newWidth, int newHeight);
+	ProgramInfo *GetSelectedItem();
 	~ProgramListView();
 
 private:

@@ -2,7 +2,7 @@
 #include "UninstallWindow.h"
 
 
-UninstallWindow::UninstallWindow() : Window(UninstallWndProc, _T("UNIN"), _T("Unin"), 800, 600)
+UninstallWindow::UninstallWindow() : Window(UninstallWndProc, _T("UNIN"), _T("Unin"), 400, 300)
 {
 
 }
@@ -14,6 +14,7 @@ UninstallWindow::~UninstallWindow()
 
 void UninstallWindow::Init()
 {
+
 }
 
 LRESULT CALLBACK UninstallWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -28,8 +29,8 @@ LRESULT CALLBACK UninstallWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM
 	case WM_GETMINMAXINFO:
 	{
 		LPMINMAXINFO lpMMI = (LPMINMAXINFO)lParam;
-		lpMMI->ptMinTrackSize.x = 800;
-		lpMMI->ptMinTrackSize.y = 600;
+		lpMMI->ptMinTrackSize.x = 400;
+		lpMMI->ptMinTrackSize.y = 300;
 	}
 	case WM_COMMAND:
 	{		
@@ -50,6 +51,7 @@ LRESULT CALLBACK UninstallWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM
 	}
 	break;
 	case WM_DESTROY:
+
 		PostQuitMessage(0);
 		break;
 	default:

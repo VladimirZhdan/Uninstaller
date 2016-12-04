@@ -32,6 +32,12 @@ void MainWindow::Init()
 	listViewPrograms = new ProgramListView(0, 50, clientRect.right, clientRect.bottom - 50, hWnd, WindowManager::GetHInstance(), clientRect);
 }
 
+void MainWindow::OpenUninstallWindow(ProgramInfo * program)
+{
+	WindowManager *windowManager = WindowManager::GetInstance();
+	windowManager->ShowWindow(WINDOW_TYPE::UNINSTALL);
+}
+
 static MainWindow *mainWindow = (MainWindow*)((WindowManager::GetInstance())->GetWindow(WINDOW_TYPE::MAIN));
 
 LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message,WPARAM wParam, LPARAM lParam)
@@ -84,6 +90,19 @@ LRESULT CALLBACK MainWndProc(HWND hWnd, UINT message,WPARAM wParam, LPARAM lPara
 		EndPaint(hWnd, &ps);
 	}
 	break;
+	case WM_NOTIFY:
+		switch (((LPNMHDR)lParam)->code)
+		{
+			case NM_DBLCLK:
+			{
+				ProgramInfo *selectedItem = mainWindow->listViewPrograms->GetSelectedItem();
+				mainWindow->OpenUninstallWindow(selectedItem);
+			}
+			break;
+			default:
+				break;
+		}
+		break;
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;

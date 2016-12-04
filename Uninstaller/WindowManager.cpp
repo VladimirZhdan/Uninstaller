@@ -3,6 +3,7 @@
 
 #include "Window.h"
 #include "MainWindow.h"
+#include "UninstallWindow.h"
 
 
 HINSTANCE WindowManager::hInstance;
@@ -12,7 +13,7 @@ int WindowManager::nCmdShow;
 WindowManager::WindowManager()
 {
 	mainWindow = NULL;
-	//unInstallWindow = NULL;
+	uninstallWindow = NULL;
 }
 
 
@@ -38,11 +39,11 @@ Window * WindowManager::GetWindow(WINDOW_TYPE wndType)
 		}
 		return mainWindow;
 	case WINDOW_TYPE::UNINSTALL:
-		/*if (loginWindow == NULL)
+		if (uninstallWindow == NULL)
 		{
-			loginWindow = new LoginWindow();
-		}
-		return loginWindow;	*/
+			uninstallWindow = new UninstallWindow();
+		}		
+		return uninstallWindow;
 	default:
 		return NULL;
 	}
