@@ -6,7 +6,7 @@ StaticText::StaticText(int X, int Y, int nWidth, int nHeight, HWND hWndParent, H
 {
 	hStaticText = CreateWindowEx(
 		0,
-		(LPCWSTR)WC_EDIT, NULL, WS_VISIBLE | WS_CHILD | WS_BORDER | LVS_SHOWSELALWAYS | LVS_REPORT | LVS_SINGLESEL,
+		(LPCWSTR)WC_EDIT, NULL, WS_VISIBLE | WS_CHILD | ES_LEFT | ES_READONLY | ES_MULTILINE,
 		X,
 		Y,
 		nWidth,
@@ -16,13 +16,6 @@ StaticText::StaticText(int X, int Y, int nWidth, int nHeight, HWND hWndParent, H
 		hInst,
 		NULL
 	);	
-}
-
-void StaticText::SetControlsParams()
-{
-	SendMessage(hStaticText, EM_SETREADONLY, TRUE, NULL);
-	//HFONT hfont = ;
-	//SendMessage(hStaticText, WM_SETFONT, , TRUE);
 }
 
 void StaticText::SetText(TCHAR *value)

@@ -9,7 +9,6 @@ public:
 	void SetText(TCHAR *value);
 	~StaticText();
 private:
-	HWND hStaticText;
-	void SetControlsParams();
+	HWND hStaticText;	
 };
 
