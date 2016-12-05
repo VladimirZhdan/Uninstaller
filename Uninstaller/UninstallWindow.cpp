@@ -5,7 +5,7 @@ bool UninstallWindow::isTerminateWaitingUninstallProgramThread = true;
 bool UninstallWindow::isCurrentProgramUninstalled = false;
 HANDLE UninstallWindow::hMutex = CreateMutex(NULL, FALSE, NULL);
 
-UninstallWindow::UninstallWindow(ProgramInfo *program) : Window(UninstallWndProc, _T("UNINSTALLWINDOW"), _T("Удаление"), WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX, 400, 200, WindowManager::GetInstance()->GetWindow(WINDOW_TYPE::MAIN)->GetHwnd())
+UninstallWindow::UninstallWindow(ProgramInfo *program) : Window(UninstallWndProc, _T("UNINSTALLWINDOW"), _T("Удаление программы"), WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX, 400, 200, WindowManager::GetInstance()->GetWindow(WINDOW_TYPE::MAIN)->GetHwnd())
 {
 	SetParams(program);
 	Init();

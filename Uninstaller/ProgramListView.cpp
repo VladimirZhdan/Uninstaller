@@ -90,7 +90,9 @@ void ProgramListView::InitListLiew(bool isRefresh)
 }
 
 void ProgramListView::Refresh()
-{	
+{		
+	delete(regWorker);
+	regWorker = new RegistryWorker();
 	programs = regWorker->GetProgramInfoVectorFromRegistry();	
 	listViewPrograms->Clear();
 	InitListLiew(false);
